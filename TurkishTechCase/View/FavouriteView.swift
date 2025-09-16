@@ -9,7 +9,14 @@ import SwiftUI
 
 struct FavouriteView: View {
     var body: some View {
-        Text("Favorite Page")
+        NavigationView {
+                    VStack {
+                        // Burda Core Data ile cache de tuttugumuz favoriler listelenicek
+                        
+                        
+                    }
+                    .navigationTitle("Favourites")
+                }
     }
 }
 

@@ -9,7 +9,20 @@ import SwiftUI
 
 struct ListView: View {
     var body: some View {
-        Text("List View")
+        NavigationView {
+                    VStack {
+                        // Burda API den alacagimiz urunler listelenicek
+                        ListItemView()
+                        ListItemView()
+                        Spacer()
+                        // Icleri su anda dummy data dolu gorunum icin.
+                        
+                    }
+                    .navigationTitle("Lists")
+                }.onAppear{
+                    // burda direk viewmodel yardimi ile sayfa yuklenir yuklenmez fetch fonksiyonu calisacak. Ki bos bir sayfa gostermesin baslangicta.
+                    
+                }
     }
 }
 
