@@ -24,7 +24,7 @@ struct ListItemView: View {
         HStack {
             HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Image(item.pictureUrl)
+                    Image("placeholder")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
@@ -64,10 +64,9 @@ struct ListItemView: View {
             item: .init(
                 id: 1,
                 title: "Test",
-                pictureUrl: "placeholder",
+                image: "placeholder",
                 description: "This is a very very long explanation of the product. It describes the features, quality, and benefits in a nice and readable format.",
                 price: 10.0,
-                isFavorite: false
             )
         )
     }

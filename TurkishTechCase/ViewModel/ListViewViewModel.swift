@@ -14,9 +14,19 @@ class ListViewViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
 
     func fetchItems() {
-        let url = "https://fakestoreapi.com/products"
-        
-        
-        
+
+        AF.request("https://fakestoreapi.com/products")
+            .validate()
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    if let products = [ListItem].fromJSON(data) { // decode içine yazdığımız extensionu kullandık burada.
+                        self.items = products
+                    }
+                case .failure(let error):
+                    print("API Error:", error)
+                }
+            }
+
     }
 }
