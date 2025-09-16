@@ -14,7 +14,7 @@ struct ListItemView: View {
 
     var body: some View {
         // bütün item clickable oldu NavigationLink sayesinde
-        NavigationLink(destination: ItemDetailView()) {
+        NavigationLink(destination: ItemDetailView(item: item)) {
             ProductCard(item: item)
 
         }

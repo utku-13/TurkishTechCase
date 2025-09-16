@@ -6,10 +6,39 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ItemDetailView: View {
-
-    @State private var isFavorite = false
+    
+    @StateObject var modelView = ItemDetailViewViewModel()
+    
+    @Environment(\.managedObjectContext) private var context
+    @FetchRequest(sortDescriptors: []) var favourites: FetchedResults<Favourite>
+    
+    private func toggleFavorite() {
+            if let fav = favourites.first {
+                fav.isFavourite.toggle()
+            } else {
+                let fav = Favourite(context: context)
+                fav.id = Int64(item.id)
+                fav.isFavourite = true
+            }
+            try? context.save()
+        }
+    
+    private var isFavorite: Bool {
+            favourites.first?.isFavourite ?? false
+        }
+    
+    let item: ListItem // initialize ederken ilk iş detayı açılacak obje ile dolacak.
+    
+    init(item: ListItem) {
+            self.item = item
+            _favourites = FetchRequest(
+                sortDescriptors: [],
+                predicate: NSPredicate(format: "id == %lld", item.id) // item.id -> Int
+            )
+        }
 
     var body: some View {
         // yazılar taşarsa diye bir önlem aldık Kaydırılabilir artık.
@@ -21,7 +50,7 @@ struct ItemDetailView: View {
                     .padding(.bottom, 8)
                     .padding(.leading, 16)
 
-                DetailPage()
+                DetailPage(item: item)
             }
             .padding()
         }
@@ -29,10 +58,11 @@ struct ItemDetailView: View {
 
     // Burada Yine modüler bir yaklaşım olması amacıyla ayırdık.
     @ViewBuilder
-    func DetailPage() -> some View {
+    func DetailPage(item: ListItem) -> some View {
         VStack(alignment: .leading, spacing: 16) {
 
-            Image("placeholder")
+            KFImage(URL(string: item.image))
+                .placeholder { ProgressView() }
                 .resizable()
                 .scaledToFit()
                 .frame(height: 250)
@@ -40,7 +70,7 @@ struct ItemDetailView: View {
                 .shadow(radius: 8)
 
             HStack {
-                Text("Item Headline")
+                Text(item.title)
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
@@ -49,7 +79,7 @@ struct ItemDetailView: View {
                 Spacer()
 
                 Button(action: {
-                    isFavorite.toggle()
+                    toggleFavorite()
                 }) {
                     Image(systemName: isFavorite ? "star.fill" : "star")
                         .foregroundColor(isFavorite ? .yellow : .gray)
@@ -57,14 +87,12 @@ struct ItemDetailView: View {
                 }
             }
 
-            Text("$199.99")
+            Text(String(format: "$%.2f", item.price))
                 .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundColor(.green)
 
-            Text(
-                "This is a very very long explanation of the product. It describes the features, quality, and benefits in a nice and readable format."
-            )
+            Text(item.description)
             .font(.body)
             .foregroundColor(.secondary)
             .multilineTextAlignment(.leading)
@@ -77,5 +105,14 @@ struct ItemDetailView: View {
 }
 
 #Preview {
-    ItemDetailView()
+    ItemDetailView(
+        item: .init(
+            id: 1,
+            title: "Test",
+            image: "placeholder",
+            description:
+                "This is a very very long explanation of the product. It describes the features, quality, and benefits in a nice and readable format.",
+            price: 10.0,
+        )
+    )
 }
