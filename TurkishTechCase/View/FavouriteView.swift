@@ -12,7 +12,7 @@ struct FavouriteView: View {
         NavigationView {
                     VStack {
                         // Burda Core Data ile cache de tuttugumuz favoriler listelenicek
-                        
+                        Spacer()
                         
                     }
                     .navigationTitle("Favourites")

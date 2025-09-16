@@ -8,39 +8,40 @@
 import SwiftUI
 
 struct ListItemView: View {
+
+    let item: ListItem
+
     var body: some View {
         NavigationLink(destination: ItemDetailView()) {
-            ProductCard()
+            ProductCard(item:item)
 
         }
     }
 
     // Kodun modülerliğini korumak, daha okunaklı hale getirmek için ViewBuilder kullandık.
     @ViewBuilder
-    func ProductCard() -> some View {
+    func ProductCard(item:ListItem) -> some View {
         HStack {
             HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Image("placeholder")
+                    Image(item.pictureUrl)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
                         .cornerRadius(12)
 
-                    Text("Product Name")
+                    Text(item.title)
                         .font(.headline)
                         .foregroundColor(.primary)
 
-                    Text("$29.99")
+                    Text(String(format: "$%.2f", item.price)) // Sadece son 2 ondalik
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
 
                 Spacer()
 
-                Text(
-                    "This is a very very long explanation of the product. It describes the features, quality, and benefits in a nice and readable format."
-                )
+                Text(item.description)
                 .font(.footnote)
                 .foregroundColor(.secondary)
                 .lineLimit(6)  // sonra karar verilcek ortalama text uzunluklarına göre
@@ -58,7 +59,16 @@ struct ListItemView: View {
 }
 
 #Preview {
-    NavigationView {
-            ListItemView()
-        }
+    NavigationStack {
+        ListItemView(
+            item: .init(
+                id: 1,
+                title: "Test",
+                pictureUrl: "placeholder",
+                description: "This is a very very long explanation of the product. It describes the features, quality, and benefits in a nice and readable format.",
+                price: 10.0,
+                isFavorite: false
+            )
+        )
+    }
 }

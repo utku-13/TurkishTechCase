@@ -8,20 +8,18 @@
 import SwiftUI
 
 struct ListView: View {
+    
+    @StateObject private var viewModel = ListViewViewModel()
+    
     var body: some View {
-        NavigationView {
-                    VStack {
-                        // Burda API den alacagimiz urunler listelenicek
-                        ListItemView()
-                        ListItemView()
-                        Spacer()
-                        // Icleri su anda dummy data dolu gorunum icin.
-                        
+        NavigationStack {
+            VStack{
+                Text("Dinamik Olarak Urunler gelicek")
+            }
+                    .navigationTitle("Products")
+                    .onAppear {
+                        viewModel.fetchItems()
                     }
-                    .navigationTitle("Lists")
-                }.onAppear{
-                    // burda direk viewmodel yardimi ile sayfa yuklenir yuklenmez fetch fonksiyonu calisacak. Ki bos bir sayfa gostermesin baslangicta.
-                    
                 }
     }
 }
