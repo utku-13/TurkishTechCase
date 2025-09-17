@@ -1,4 +1,4 @@
-#  TurkishTechCase - iOS E-Ticaret Uygulaması
+#  TurkishTechnology Case App
 
 Modern SwiftUI ile geliştirilmiş, kullanıcı dostu bir e-ticaret uygulaması. Fake Store API'den ürün verilerini çekerek, favori ürün yönetimi ve detaylı ürün görüntüleme özellikleri sunar.
 
