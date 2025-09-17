@@ -49,11 +49,6 @@ Favori olarak işaretlediğiniz ürünleri bu sayfada görüntüleyebilirsiniz.
 ### **Image Processing**
 - **Kingfisher**: Asenkron resim indirme, önbellekleme ve görüntüleme
 
-### **Development Tools**
-- **Xcode**: iOS geliştirme ortamı
-- **Swift 5.0**: Modern programlama dili
-- **iOS 18.5+**: Minimum desteklenen sürüm
-
 ## 📁 Proje Mimarisi
 
 ```
@@ -72,7 +67,7 @@ TurkishTechCase/
 └── Repository/
     ├── TurkishTechCaseApp.swift    # App entry point
     ├── FavouriteDataController.swift # Core Data yönetimi
-    ├── Extensions.swift            # Utility extensions
+    ├── Extensions.swift            # extensions for JSON parsing
     ├── Assets.xcassets/           # App resources
     └── Favourite.xcdatamodeld/    # Core Data model
 ```
@@ -91,13 +86,6 @@ TurkishTechCase/
 - **Repository Pattern**: Veri erişim katmanının soyutlanması
 - **Observer Pattern**: SwiftUI'ın @Published ve @StateObject ile reactive programming
 - **Singleton Pattern**: DataController için tek instance kullanımı
-
-##  Performans Optimizasyonları
-
-- **Lazy Loading**: Liste görünümlerinde performans için lazy loading
-- **Image Caching**: Kingfisher ile otomatik resim önbellekleme
-- **Memory Management**: SwiftUI'ın otomatik memory management'ı
-- **Core Data Optimization**: Efficient querying ve batch operations
 
 ##  Kurulum ve Çalıştırma
 
