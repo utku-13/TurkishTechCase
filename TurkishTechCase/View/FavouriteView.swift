@@ -10,6 +10,7 @@ import SwiftUI
 struct FavouriteView: View {
     @Environment(\.managedObjectContext) private var context
 
+    // Core Data'dan sadece favouriteları çekiyoruz
     @FetchRequest(
         sortDescriptors: [],
         predicate: NSPredicate(format: "isFavourite == YES")
@@ -17,9 +18,10 @@ struct FavouriteView: View {
 
     @StateObject var viewModel = ListViewViewModel()
 
+    // Core Data’daki favouritelerin id seti
     private var favouriteIds: Set<Int64> {
         Set(favourites.map { $0.id })
-    } // Favorilerin idlerini topladık aşşağıda contain ile karşılaştırıcaz.
+    }
 
     var body: some View {
         NavigationStack {
@@ -30,14 +32,26 @@ struct FavouriteView: View {
                     Text("❌ Error: \(error)")
                         .foregroundColor(.red)
                 } else {
-                    // Filtered the favourite product ids and compare then paste
-                    List(
-                        viewModel.items.filter {
-                            favouriteIds.contains(Int64($0.id))
-                        },
-                        id: \.id
-                    ) { item in
-                        ListItemView(item: item)
+                    // API’den gelen ürünleri filtreliyoruz → sadece favouritelerde olanlar kalıyor
+                    let filteredItems = viewModel.items.filter {
+                        favouriteIds.contains(Int64($0.id))
+                    }
+
+                    if filteredItems.isEmpty {
+                        Text("No favourites yet!! Go add some")
+                            .foregroundColor(.secondary)
+                            .padding()
+                    } else {
+                        List(filteredItems, id: \.id) { item in
+                            NavigationLink(
+                                destination: ItemDetailView(
+                                    item: item,
+                                    dataController: DataController()
+                                )
+                            ) {
+                                ListItemView(item: item)
+                            }
+                        }
                     }
                 }
             }
@@ -50,5 +64,7 @@ struct FavouriteView: View {
 }
 
 #Preview {
-    FavouriteView()
+    let controller = DataController(inMemory: true)
+    return FavouriteView()
+        .environment(\.managedObjectContext, controller.container.viewContext)
 }

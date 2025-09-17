@@ -16,6 +16,7 @@ struct TurkishTechCaseApp: App {
         WindowGroup {
             MainView()
                 .environment(\.managedObjectContext, dataController.container.viewContext)
+                .environmentObject(dataController)
         }
     }
 }

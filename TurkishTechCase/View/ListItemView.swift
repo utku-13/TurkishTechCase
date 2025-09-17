@@ -11,12 +11,12 @@ import SwiftUI
 struct ListItemView: View {
 
     let item: ListItem
+    @EnvironmentObject private var dataController: DataController
 
     var body: some View {
         // bütün item clickable oldu NavigationLink sayesinde
-        NavigationLink(destination: ItemDetailView(item: item)) {
+        NavigationLink(destination: ItemDetailView(item: item, dataController: dataController)) {
             ProductCard(item: item)
-
         }
     }
 

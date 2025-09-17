@@ -5,40 +5,25 @@
 //  Created by Utku Özer on 16.09.2025.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct ItemDetailView: View {
-    
-    @StateObject var modelView = ItemDetailViewViewModel()
-    
+
     @Environment(\.managedObjectContext) private var context
-    @FetchRequest(sortDescriptors: []) var favourites: FetchedResults<Favourite>
-    
-    private func toggleFavorite() {
-            if let fav = favourites.first {
-                fav.isFavourite.toggle()
-            } else {
-                let fav = Favourite(context: context)
-                fav.id = Int64(item.id)
-                fav.isFavourite = true
-            }
-            try? context.save()
-        }
-    
-    private var isFavorite: Bool {
-            favourites.first?.isFavourite ?? false
-        }
-    
-    let item: ListItem // initialize ederken ilk iş detayı açılacak obje ile dolacak.
-    
-    init(item: ListItem) {
-            self.item = item
-            _favourites = FetchRequest(
-                sortDescriptors: [],
-                predicate: NSPredicate(format: "id == %lld", item.id) // item.id -> Int
+    @StateObject private var viewModel: ItemDetailViewViewModel
+
+    let item: ListItem
+
+    init(item: ListItem, dataController: DataController) {
+        self.item = item
+        _viewModel = StateObject(
+            wrappedValue: ItemDetailViewViewModel(
+                item: item,
+                dataController: dataController
             )
-        }
+        )
+    }
 
     var body: some View {
         // yazılar taşarsa diye bir önlem aldık Kaydırılabilir artık.
@@ -53,6 +38,8 @@ struct ItemDetailView: View {
                 DetailPage(item: item)
             }
             .padding()
+        }.onAppear {
+            viewModel.load(context: context)
         }
     }
 
@@ -78,12 +65,14 @@ struct ItemDetailView: View {
 
                 Spacer()
 
-                Button(action: {
-                    toggleFavorite()
-                }) {
-                    Image(systemName: isFavorite ? "star.fill" : "star")
-                        .foregroundColor(isFavorite ? .yellow : .gray)
-                        .font(.system(size: 28))
+                Button {
+                    viewModel.toggleFavourite(in: context)
+                } label: {
+                    Image(
+                        systemName: viewModel.isFavourite ? "star.fill" : "star"
+                    )
+                    .foregroundColor(viewModel.isFavourite ? .yellow : .gray)
+                    .font(.system(size: 28))
                 }
             }
 
@@ -93,10 +82,10 @@ struct ItemDetailView: View {
                 .foregroundColor(.green)
 
             Text(item.description)
-            .font(.body)
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.leading)
-            .lineSpacing(4)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.leading)
+                .lineSpacing(4)
 
             Spacer()
         }
@@ -105,14 +94,16 @@ struct ItemDetailView: View {
 }
 
 #Preview {
-    ItemDetailView(
+    let controller = DataController(inMemory: true)
+    return ItemDetailView(
         item: .init(
             id: 1,
             title: "Test",
-            image: "placeholder",
-            description:
-                "This is a very very long explanation of the product. It describes the features, quality, and benefits in a nice and readable format.",
-            price: 10.0,
-        )
+            image: "https://via.placeholder.com/300",
+            description: "This is a test product description",
+            price: 10.0
+        ),
+        dataController: controller
     )
+    .environment(\.managedObjectContext, controller.container.viewContext)
 }
