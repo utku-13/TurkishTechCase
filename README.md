@@ -12,7 +12,8 @@ Ana sayfada tüm ürünler liste halinde görüntülenir. Her ürün için resim
 ### Ürün Detay Sayfası
 Seçilen ürünün detaylı bilgilerini görüntüleyebilir ve favorilere ekleyebilirsiniz.
 
-![Ürün Detayı](TurkishTechCase/Screenshots/detailspage.PNG)
+<img src="TurkishTechCase/Screenshots/detailspage.PNG" alt="Ürün Detayı" width="300" height="200"/>
+
 
 ### Favori Butonu Fonksiyonu
 Ürünleri favorilere eklemek için yıldız butonunu kullanabilirsiniz.
