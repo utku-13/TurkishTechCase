@@ -7,23 +7,23 @@ Modern SwiftUI ile geliştirilmiş, kullanıcı dostu bir e-ticaret uygulaması.
 ### Ana Sayfa
 Ana sayfada tüm ürünler liste halinde görüntülenir. Her ürün için resim, başlık, fiyat ve açıklama bilgileri gösterilir.
 
-![Ana Sayfa](TurkishTechCase/Screenshots/homepage.PNG)
+<img src="TurkishTechCase/Screenshots/homepage.PNG" alt="Ürün Detayı" width="300"/>
 
 ### Ürün Detay Sayfası
 Seçilen ürünün detaylı bilgilerini görüntüleyebilir ve favorilere ekleyebilirsiniz.
 
-<img src="TurkishTechCase/Screenshots/detailspage.PNG" alt="Ürün Detayı" width="300" height="200"/>
+<img src="TurkishTechCase/Screenshots/detailspage.PNG" alt="Ürün Detayı" width="300"/>
 
 
 ### Favori Butonu Fonksiyonu
 Ürünleri favorilere eklemek için yıldız butonunu kullanabilirsiniz.
 
-![Favori Butonu](TurkishTechCase/Screenshots/favouritebuttonfunction.PNG)
+<img src="TurkishTechCase/Screenshots/favouritebuttonfunction.PNG" alt="Favori Butonu" width="300"/>
 
 ### Favoriler Sayfası
 Favori olarak işaretlediğiniz ürünleri bu sayfada görüntüleyebilirsiniz.
 
-![Favoriler Sayfası](TurkishTechCase/Screenshots/favouritespage.PNG)
+<img src="TurkishTechCase/Screenshots/favouritespage.PNG" alt="Favoriler Sayfası" width="300"/>
 
 ## 🚀 Özellikler
 
