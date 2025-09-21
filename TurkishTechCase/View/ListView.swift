@@ -14,16 +14,11 @@ struct ListView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.isLoading {
-                    ProgressView("Loading...")
-                } else if let error = viewModel.errorMessage {
-                    Text("❌ Error: \(error)")
-                        .foregroundColor(.red)
-                } else {
-                    List(viewModel.items, id: \.id) { item in
-                        ListItemView(item: item)
-                    }
+
+                List(viewModel.items, id: \.id) { item in
+                    ListItemView(item: item)
                 }
+
             }
             .navigationTitle("Products")
             .onAppear {

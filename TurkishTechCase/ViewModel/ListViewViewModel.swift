@@ -10,8 +10,6 @@ import Foundation
 
 class ListViewViewModel: ObservableObject {
     @Published var items: [ListItem] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String? = nil
 
     func fetchItems() {
 

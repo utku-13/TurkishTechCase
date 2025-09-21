@@ -26,34 +26,22 @@ struct FavouriteView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.isLoading {
-                    ProgressView("Loading...")
-                } else if let error = viewModel.errorMessage {
-                    Text("❌ Error: \(error)")
-                        .foregroundColor(.red)
-                } else {
-                    // API’den gelen ürünleri filtreliyoruz → sadece favouritelerde olanlar kalıyor
-                    let filteredItems = viewModel.items.filter {
-                        favouriteIds.contains(Int64($0.id))
-                    }
 
-                    if filteredItems.isEmpty {
-                        Text("No favourites yet!! Go add some")
-                            .foregroundColor(.secondary)
-                            .padding()
-                    } else {
-                        List(filteredItems, id: \.id) { item in
-                            NavigationLink(
-                                destination: ItemDetailView(
-                                    item: item,
-                                    dataController: DataController()
-                                )
-                            ) {
-                                ListItemView(item: item)
-                            }
-                        }
+                // API’den gelen ürünleri filtreliyoruz → sadece favouritelerde olanlar kalıyor
+                let filteredItems = viewModel.items.filter {
+                    favouriteIds.contains(Int64($0.id))
+                }
+
+                if filteredItems.isEmpty {
+                    Text("No favourites yet!! Go add some")
+                        .foregroundColor(.secondary)
+                        .padding()
+                } else {
+                    List(filteredItems, id: \.id) { item in
+                        ListItemView(item: item)
                     }
                 }
+
             }
             .navigationTitle("Favourites")
             .onAppear {

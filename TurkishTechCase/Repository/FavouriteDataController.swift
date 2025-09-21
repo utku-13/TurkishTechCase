@@ -12,7 +12,7 @@ class DataController: ObservableObject {
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "Favourite") // 👈 xcdatamodeld dosya adı
+        container = NSPersistentContainer(name: "Favourite") // xcdatamodeld dosya adı
 
         if inMemory {
             let desc = NSPersistentStoreDescription()
@@ -52,13 +52,6 @@ class DataController: ObservableObject {
             fav.isFavourite = true
         }
         try context.save()
-    }
-
-    func removeFromFavourites(itemID: Int64, in context: NSManagedObjectContext) throws {
-        if let fav = try favourite(for: itemID, in: context) {
-            context.delete(fav)
-            try context.save()
-        }
     }
 
     /// Toggle mantığı: favoriyse sil, değilse ekle.
