@@ -44,8 +44,8 @@ struct FavouriteView: View {
 
             }
             .navigationTitle("Favourites")
-            .onAppear {
-                viewModel.fetchItems()
+            .task {
+                await viewModel.fetchItems()
             }
         }
     }

@@ -21,8 +21,8 @@ struct ListView: View {
 
             }
             .navigationTitle("Products")
-            .onAppear {
-                viewModel.fetchItems()
+            .task {
+                await viewModel.fetchItems()
             }
         }
     }

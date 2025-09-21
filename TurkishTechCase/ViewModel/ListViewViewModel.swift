@@ -11,20 +11,20 @@ import Foundation
 class ListViewViewModel: ObservableObject {
     @Published var items: [ListItem] = []
 
-    func fetchItems() {
-
-        AF.request("https://fakestoreapi.com/products")
-            .validate()
-            .responseData { response in
-                switch response.result {
-                case .success(let data):
-                    if let products = [ListItem].fromJSON(data) { // decode içine yazdığımız extensionu kullandık burada.
-                        self.items = products
-                    }
-                case .failure(let error):
-                    print("API Error:", error)
+    func fetchItems() async {
+        do {
+            let data = try await AF.request("https://fakestoreapi.com/products")
+                .validate()
+                .serializingData()
+                .value
+            
+            if let products = [ListItem].fromJSON(data) { // decode içine yazdığımız extensionu kullandık burada.
+                await MainActor.run {
+                    self.items = products
                 }
             }
-
+        } catch {
+            print("API Error:", error)
+        }
     }
 }
