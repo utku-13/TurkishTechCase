@@ -19,13 +19,19 @@ final class ItemDetailViewViewModel: ObservableObject {
         self.dataController = dataController
     }
 
-    func load(context: NSManagedObjectContext) {
-        isFavourite = dataController.isFavourite(itemID: itemID, in: context)
+    func load() async {
+        let favourite = await dataController.isFavourite(itemID: itemID)
+        await MainActor.run {
+            self.isFavourite = favourite
+        }
     }
 
-    func toggleFavourite(in context: NSManagedObjectContext) {
+    func toggleFavourite() async {
         do {
-            isFavourite = try dataController.toggleFavourite(itemID: itemID, in: context)
+            let newState = try await dataController.toggleFavourite(itemID: itemID)
+            await MainActor.run {
+                self.isFavourite = newState
+            }
         } catch {
             print("Toggle failed:", error)
         }

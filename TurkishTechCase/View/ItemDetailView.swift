@@ -38,8 +38,8 @@ struct ItemDetailView: View {
                 DetailPage(item: item)
             }
             .padding()
-        }.onAppear {
-            viewModel.load(context: context)
+        }.task {
+            await viewModel.load()
         }
     }
 
@@ -66,7 +66,9 @@ struct ItemDetailView: View {
                 Spacer()
 
                 Button {
-                    viewModel.toggleFavourite(in: context)
+                    Task {
+                        await viewModel.toggleFavourite()
+                    }
                 } label: {
                     Image(
                         systemName: viewModel.isFavourite ? "star.fill" : "star"

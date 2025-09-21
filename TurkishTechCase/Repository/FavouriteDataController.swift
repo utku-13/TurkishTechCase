@@ -11,6 +11,14 @@ import Foundation
 class DataController: ObservableObject {
     let container: NSPersistentContainer
 
+    // Background context for async operations
+    private lazy var backgroundContext: NSManagedObjectContext = {
+        let context = container.newBackgroundContext()
+        context.automaticallyMergesChangesFromParent = true
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
+    }()
+    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Favourite") // xcdatamodeld dosya adı
 
@@ -29,21 +37,21 @@ class DataController: ObservableObject {
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
-
-    // MARK: - Repository Methods
-
-    func favourite(for itemID: Int64, in context: NSManagedObjectContext) throws -> Favourite? {
+    
+    private func favourite(for itemID: Int64, in context: NSManagedObjectContext) throws -> Favourite? {
         let req: NSFetchRequest<Favourite> = Favourite.fetchRequest()
         req.fetchLimit = 1
         req.predicate = NSPredicate(format: "id == %lld", itemID)
         return try context.fetch(req).first
     }
 
-    func isFavourite(itemID: Int64, in context: NSManagedObjectContext) -> Bool {
-        (try? favourite(for: itemID, in: context)?.isFavourite) ?? false
+    func isFavourite(itemID: Int64) async -> Bool {
+        return await backgroundContext.perform {
+            return (try? self.favourite(for: itemID, in: self.backgroundContext)?.isFavourite) ?? false
+        }
     }
 
-    func addToFavourites(itemID: Int64, in context: NSManagedObjectContext) throws {
+    private func addToFavourites(itemID: Int64, in context: NSManagedObjectContext) throws {
         if let existing = try favourite(for: itemID, in: context) {
             existing.isFavourite = true
         } else {
@@ -56,20 +64,22 @@ class DataController: ObservableObject {
 
     /// Toggle mantığı: favoriyse sil, değilse ekle.
     @discardableResult
-    func toggleFavourite(itemID: Int64, in context: NSManagedObjectContext) throws -> Bool {
-        if let fav = try favourite(for: itemID, in: context) {
-            if fav.isFavourite {
-                context.delete(fav)         // favoriden çıkar
-                try context.save()
-                return false
+    func toggleFavourite(itemID: Int64) async throws -> Bool {
+        return try await backgroundContext.perform {
+            if let fav = try self.favourite(for: itemID, in: self.backgroundContext) {
+                if fav.isFavourite {
+                    self.backgroundContext.delete(fav)         // favoriden çıkar
+                    try self.backgroundContext.save()
+                    return false
+                } else {
+                    fav.isFavourite = true     // var ama false → tekrar fav yap
+                    try self.backgroundContext.save()
+                    return true
+                }
             } else {
-                fav.isFavourite = true     // var ama false → tekrar fav yap
-                try context.save()
+                try self.addToFavourites(itemID: itemID, in: self.backgroundContext) // hiç yoksa → ekle
                 return true
             }
-        } else {
-            try addToFavourites(itemID: itemID, in: context) // hiç yoksa → ekle
-            return true
         }
     }
 }
