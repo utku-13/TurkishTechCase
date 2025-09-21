@@ -23,7 +23,7 @@ Seçilen ürünün detaylı bilgilerini görüntüleyebilir ve favorilere ekleye
 ### Favoriler Sayfası
 Favori olarak işaretlediğiniz ürünleri bu sayfada görüntüleyebilirsiniz.
 
-<img src="TurkishTechCase/Screenshots/favouritespage.PNG" alt="Favoriler Sayfası" width="300"/>
+<img src="TurkishTechCase/Screenshots/favouritespage.jpeg" alt="Favoriler Sayfası" width="300"/>
 
 ## 🚀 Özellikler
 
